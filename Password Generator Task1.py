@@ -1,48 +1,35 @@
-import string
 import random
+import string
 
-# Getting password length
-length = int(input("Enter password length: "))
+def generate_password(length):
+    """Generate a random password with given length."""
+    # Combine all character sets for complexity
+    characters = string.ascii_letters + string.digits + string.punctuation
+    # Ensure at least one character from each set for stronger passwords
+    password = [
+        random.choice(string.ascii_lowercase),
+        random.choice(string.ascii_uppercase),
+        random.choice(string.digits),
+        random.choice(string.punctuation)
+    ]
+    # Fill the rest with random choices
+    password += random.choices(characters, k=length-4)
+    # Shuffle to avoid predictable order
+    random.shuffle(password)
+    return ''.join(password)
 
-print('''Choose character set for password from these : 
-         1. Digits
-         2. Letters
-         3. Special characters
-         4. Exit''')
-
-characterList = ""
-
-# Getting character set for password
-while(True):
-    choice = int(input("Pick a number "))
-    if(choice == 1):
-        
-        # Adding letters to possible characters
-        characterList += string.ascii_letters
-    elif(choice == 2):
-        
-        # Adding digits to possible characters
-        characterList += string.digits
-    elif(choice == 3):
-        
-        # Adding special characters to possible
-        # characters
-        characterList += string.punctuation
-    elif(choice == 4):
+# User input for desired password length
+while True:
+    try:
+        length = int(input("Enter desired password length (minimum 4): "))
+        if length < 4:
+            print("Password must be at least 4 characters long.")
+            continue
         break
-    else:
-        print("Please pick a valid option!")
+    except ValueError:
+        print("Please enter a valid number.")
 
-password = []
+# Generate and display the password
+password = generate_password(length)
+print("Generated Password:", password)
 
-for i in range(length):
-  
-    # Picking a random character from our 
-    # character list
-    randomchar = random.choice(characterList)
-    
-    # appending a random character to password
-    password.append(randomchar)
-
-# printing password as a string
-print("The random password is " + "".join(password))
